@@ -1,0 +1,89 @@
+/* --- Global Reset & Typography --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top right, #1a1a3e, #0a0a1a);
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+/* --- 3D Depth & Glass Components --- */
+
+/* The "Physical" Card: Used for Birthday Time-Lock and Feature Cards */
+.card-3d {
+    background: linear-gradient(150deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-3d:hover { 
+    transform: translateY(-5px) scale(1.01); 
+}
+
+/* Glass Input Fields */
+.glass-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+/* Premium Buttons */
+.btn-premium {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 700;
+    padding: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+.btn-premium:hover {
+    background: #e5e5e5;
+    transform: translateY(-2px);
+}
+
+/* Feature Window (As seen in Focus Effect design) */
+.visual-window {
+    background: radial-gradient(circle at center, #2a2a2a, #0a0a0a);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Typography Hierarchy */
+.heading-main {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.text-sub {
+    color: #a0a0a0;
+    line-height: 1.6;
+}
+
+.label-accent {
+    color: #f97316; /* Orange accent */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+}
