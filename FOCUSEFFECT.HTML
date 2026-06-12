@@ -1,0 +1,51 @@
+<style>
+    /* Mimicking the professional depth and blur from image_5d4155.png */
+    .feature-card {
+        background: #121212;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .visual-window {
+        background: radial-gradient(circle at center, #2a2a2a, #0a0a0a);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    .typography-main {
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        letter-spacing: -0.02em;
+    }
+
+    .typography-sub {
+        color: #a0a0a0;
+        font-family: 'Inter', sans-serif;
+    }
+</style>
+
+<div class="feature-card p-10 max-w-2xl mx-auto">
+    <!-- Step Indicator -->
+    <div class="text-orange-600 font-bold tracking-widest text-xs mb-4">02 MEMORY EFFECT</div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <!-- Text Content -->
+        <div>
+            <h2 class="typography-main text-3xl font-semibold mb-4">Deep Focus Memories</h2>
+            <p class="typography-sub leading-relaxed">
+                We frame your family moments with cinematic depth. Blur the background, spotlight the smiles, and isolate the emotion—like a professional cinematographer's shallow depth of field.
+            </p>
+        </div>
+
+        <!-- 3D Visualization Area -->
+        <div class="visual-window p-6 h-64 flex items-center justify-center">
+            <div class="w-32 h-48 bg-white/10 rounded-lg border border-white/20 backdrop-blur-md shadow-2xl rotate-3">
+                <!-- Placeholder for 3D render/photo -->
+                <div class="w-full h-full bg-gradient-to-b from-transparent to-black/50"></div>
+            </div>
+        </div>
+    </div>
+</div>
