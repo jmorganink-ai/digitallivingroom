@@ -1,0 +1,5 @@
+<!-- Link to your HD 3D styles -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Link to your app logic -->
+<script src="app.js" defer></script>
