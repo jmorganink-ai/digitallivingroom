@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LensFlow Pro — Private Circle</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-6">
+
+    <div class="card-3d max-w-4xl mx-auto h-[80vh] flex flex-col overflow-hidden">
+        <!-- Header -->
+        <div class="p-6 border-b border-white/10 flex justify-between items-center">
+            <h1 class="heading-main text-xl">Inner Circle</h1>
+            <div class="flex gap-4">
+                <button onclick="startChallenge('eiffel')" class="text-xs label-accent hover:text-white transition">Eiffel Challenge</button>
+                <button onclick="shareLocation()" class="text-xs label-accent hover:text-white transition">Share Map</button>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div class="message-box bg-white/5 p-4 rounded-xl max-w-md border border-white/5">
+                <p class="text-sub">Welcome to your private space. The memories start here.</p>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-6 border-t border-white/10">
+            <div class="flex gap-2">
+                <input id="chat-input" type="text" placeholder="Type a message..." class="glass-input flex-1">
+                <button onclick="sendMessage()" class="btn-premium">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Booth Modal (Hidden by default) -->
+    <div id="photo-booth-modal" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4">
+        <div class="card-3d p-6 w-full max-w-2xl">
+            <div class="visual-window h-80 mb-6 relative">
+                <video id="booth-video" autoplay playsinline class="w-full h-full object-cover"></video>
+            </div>
+            <div class="flex gap-4 justify-center">
+                <button onclick="capturePhoto()" class="btn-premium">Capture Memory</button>
+                <button onclick="closeBooth()" class="bg-white/5 text-white px-6 py-4 rounded-xl font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+</html>
