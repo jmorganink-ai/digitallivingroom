@@ -1,89 +1,120 @@
-/* --- Global Reset & Typography --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LensFlow | Unified Platform</title>
+    <style>
+        :root {
+            /* Electric Sky (Unified Main Platform / Management) */
+            --bg-main: #F0F9FF;
+            --accent-main: #F59E0B;
+            --text-main: #1E293B;
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-}
+            /* FocusEngine (Hardware Surface / Recording Layer) */
+            --bg-surface: #1E293B;
+            --accent-surface: #22C55E;
+            --text-surface: #F8FAFC;
+        }
 
-body {
-    background: radial-gradient(circle at top right, #1a1a3e, #0a0a1a);
-    color: #ffffff;
-    min-height: 100vh;
-}
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
 
-/* --- 3D Depth & Glass Components --- */
+        /* Mode Containers */
+        .app-container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-/* The "Physical" Card: Used for Birthday Time-Lock and Feature Cards */
-.card-3d {
-    background: linear-gradient(150deg, #1a1a2e 0%, #16213e 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        /* Electric Sky Mode */
+        .electric-sky {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
 
-.card-3d:hover { 
-    transform: translateY(-5px) scale(1.01); 
-}
+        /* FocusEngine Mode */
+        .focus-engine {
+            background-color: var(--bg-surface);
+            color: var(--text-surface);
+        }
 
-/* Glass Input Fields */
-.glass-input {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-    color: white;
-    padding: 1rem;
-    border-radius: 12px;
-}
+        .toggle-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-/* Premium Buttons */
-.btn-premium {
-    background: #ffffff;
-    color: #000000;
-    font-weight: 700;
-    padding: 1rem;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
-}
+        .btn-electric { background-color: var(--accent-main); color: white; }
+        .btn-focus { background-color: var(--accent-surface); color: var(--bg-surface); }
 
-.btn-premium:hover {
-    background: #e5e5e5;
-    transform: translateY(-2px);
-}
+        h1 { margin: 0; }
+        .status-badge {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="electric-sky" id="appRoot">
 
-/* Feature Window (As seen in Focus Effect design) */
-.visual-window {
-    background: radial-gradient(circle at center, #2a2a2a, #0a0a0a);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    box-shadow: inset 0 2px 20px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    <div class="app-container">
+        <button class="toggle-btn btn-focus" onclick="toggleMode()">Switch to FocusEngine</button>
+        
+        <h1 id="modeTitle">LensFlow | Electric Sky</h1>
+        <p id="modeDesc">Management & Glimr Integration Layer</p>
+        
+        <div class="status-badge" id="statusBadge" style="border: 2px solid var(--accent-main);">
+            System Status: Operational
+        </div>
+    </div>
 
-/* Typography Hierarchy */
-.heading-main {
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-}
+    <script>
+        function toggleMode() {
+            const root = document.getElementById('appRoot');
+            const title = document.getElementById('modeTitle');
+            const desc = document.getElementById('modeDesc');
+            const badge = document.getElementById('statusBadge');
+            const btn = document.querySelector('.toggle-btn');
 
-.text-sub {
-    color: #a0a0a0;
-    line-height: 1.6;
-}
-
-.label-accent {
-    color: #f97316; /* Orange accent */
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.75rem;
-}
+            if (root.classList.contains('electric-sky')) {
+                // Switch to FocusEngine
+                root.classList.remove('electric-sky');
+                root.classList.add('focus-engine');
+                
+                title.innerText = "FocusEngine | Hardware Surface";
+                desc.innerText = "Recording Engine Active";
+                badge.style.borderColor = "var(--accent-surface)";
+                btn.innerText = "Switch to Electric Sky";
+                btn.classList.remove('btn-focus');
+                btn.classList.add('btn-electric');
+            } else {
+                // Switch to Electric Sky
+                root.classList.remove('focus-engine');
+                root.classList.add('electric-sky');
+                
+                title.innerText = "LensFlow | Electric Sky";
+                desc.innerText = "Management & Glimr Integration Layer";
+                badge.style.borderColor = "var(--accent-main)";
+                btn.innerText = "Switch to FocusEngine";
+                btn.classList.remove('btn-electric');
+                btn.classList.add('btn-focus');
+            }
+        }
+    </script>
+</body>
+</html>
