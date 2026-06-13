@@ -6,37 +6,20 @@
     <title>LensFlow | Unified Platform</title>
     <style>
         :root {
-            /* Electric Sky (Management Layer) */
+            /* Electric Sky (Management) */
             --bg-main: #F0F9FF;
             --accent-main: #F59E0B;
             --text-main: #1E293B;
 
-            /* FocusEngine (Hardware Surface) */
+            /* FocusEngine (Recording) */
             --bg-surface: #1E293B;
             --accent-surface: #22C55E;
             --text-surface: #F8FAFC;
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100%;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
+        body, html { margin: 0; padding: 0; font-family: sans-serif; height: 100%; transition: background-color 0.4s ease, color 0.4s ease; }
+        .app-container { height: 100vh; width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
 
-        .app-container {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* Mode Styles */
         .electric-sky { background-color: var(--bg-main); color: var(--text-main); }
         .focus-engine { background-color: var(--bg-surface); color: var(--text-surface); }
 
@@ -44,14 +27,13 @@
         .btn-focus { background-color: var(--accent-surface); color: var(--bg-surface); }
         .btn-electric { background-color: var(--accent-main); color: white; }
 
-        /* Dashboard & Recording View */
         #managementView { width: 100%; max-width: 800px; display: block; }
         #recordingView { width: 100%; max-width: 800px; display: none; text-align: center; }
         
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--text-main); }
         
-        #cameraFeed { background: #000; border-radius: 10px; width: 100%; max-width: 640px; border: 4px solid var(--accent-surface); }
+        #cameraFeed { background: #000; border-radius: 10px; width: 100%; max-width: 640px; border: 4px solid var(--accent-surface); transform: scaleX(-1); }
         
         .status-badge { margin-top: 30px; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; border: 2px solid; }
     </style>
@@ -62,30 +44,20 @@
         <button class="toggle-btn btn-focus" onclick="toggleMode()" id="modeToggleBtn">Switch to FocusEngine</button>
         
         <div id="contentArea">
-            <!-- MANAGEMENT LAYER -->
             <div id="managementView">
                 <h1 id="modeTitle">LensFlow | Electric Sky</h1>
                 <p id="modeDesc">Management & Glimr Integration Layer</p>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Glimr Assets</h3>
-                        <p>Active Leads: 12</p>
-                        <button style="background: var(--accent-main); border: none; padding: 8px; border-radius: 4px; color: white; cursor: pointer;">Sync Data</button>
-                    </div>
-                    <div class="stat-card">
-                        <h3>LensFlow Status</h3>
-                        <p>Storage: 45% used</p>
-                        <button style="background: var(--accent-main); border: none; padding: 8px; border-radius: 4px; color: white; cursor: pointer;">Manage Storage</button>
-                    </div>
+                    <div class="stat-card"><h3>Glimr Assets</h3><p>Active Leads: 12</p></div>
+                    <div class="stat-card"><h3>LensFlow Status</h3><p>Storage: 45% used</p></div>
                 </div>
             </div>
 
-            <!-- RECORDING LAYER -->
             <div id="recordingView">
                 <h2>Hardware Surface: Active</h2>
-                <video id="cameraFeed" autoplay playsinline></video>
+                <video id="cameraFeed" autoplay playsinline muted></video>
                 <div style="margin-top: 20px;">
-                    <button class="btn-focus" style="padding: 15px 40px; font-size: 1.2rem; border-radius: 8px; border: none; cursor: pointer;">Start Recording</button>
+                    <button id="recBtn" class="btn-focus" style="padding: 15px 40px; font-size: 1.2rem; border-radius: 8px; border: none; cursor: pointer;" onclick="toggleRecording()">Start Recording</button>
                 </div>
             </div>
 
@@ -94,6 +66,55 @@
     </div>
 
     <script>
+        const video = document.getElementById('cameraFeed');
+        const recBtn = document.getElementById('recBtn');
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        // Camera Logic
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                video.srcObject = stream;
+            } catch (err) { alert("Camera access denied."); }
+        }
+
+        // Recording Logic
+        function toggleRecording() {
+            if (recBtn.innerText === "Start Recording") {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        function startRecording() {
+            recordedChunks = [];
+            const stream = video.srcObject;
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = (e) => recordedChunks.push(e.data);
+            mediaRecorder.onstop = saveRecording;
+            mediaRecorder.start();
+            recBtn.innerText = "Stop Recording";
+            recBtn.style.backgroundColor = "#EF4444"; // Red for recording
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+            recBtn.innerText = "Start Recording";
+            recBtn.style.backgroundColor = "var(--accent-surface)";
+        }
+
+        function saveRecording() {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lensflow-recording.webm';
+            a.click();
+        }
+
+        // Mode Switching
         function toggleMode() {
             const root = document.getElementById('appRoot');
             const btn = document.getElementById('modeToggleBtn');
@@ -103,31 +124,20 @@
             const title = document.getElementById('modeTitle');
 
             if (root.classList.contains('electric-sky')) {
-                // Switch to FocusEngine
-                root.classList.remove('electric-sky');
-                root.classList.add('focus-engine');
-                
+                root.classList.replace('electric-sky', 'focus-engine');
                 mgmt.style.display = "none";
                 record.style.display = "block";
-                
                 btn.innerText = "Switch to Electric Sky";
-                btn.classList.remove('btn-focus');
-                btn.classList.add('btn-electric');
-                
+                btn.classList.replace('btn-focus', 'btn-electric');
                 badge.style.borderColor = "var(--accent-surface)";
                 title.innerText = "FocusEngine | Hardware Surface";
+                startCamera();
             } else {
-                // Switch to Electric Sky
-                root.classList.remove('focus-engine');
-                root.classList.add('electric-sky');
-                
+                root.classList.replace('focus-engine', 'electric-sky');
                 mgmt.style.display = "block";
                 record.style.display = "none";
-                
                 btn.innerText = "Switch to FocusEngine";
-                btn.classList.remove('btn-electric');
-                btn.classList.add('btn-focus');
-                
+                btn.classList.replace('btn-electric', 'btn-focus');
                 badge.style.borderColor = "var(--accent-main)";
                 title.innerText = "LensFlow | Electric Sky";
             }
