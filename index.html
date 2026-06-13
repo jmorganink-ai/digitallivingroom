@@ -3,45 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LensFlow | Unified Platform</title>
+    <title>LensFlow | Professional Suite</title>
     <style>
         :root {
-            --bg-main: #F0F9FF; --accent-main: #F59E0B; --text-main: #1E293B;
-            --bg-surface: #1E293B; --accent-surface: #22C55E; --text-surface: #F8FAFC;
+            /* Palette */
+            --bg-main: #f8fafc;
+            --accent-gold: #f59e0b;
+            --bg-dark: #0f172a;
+            --accent-green: #22c55e;
+            --text-dark: #1e293b;
+            --glass: rgba(255, 255, 255, 0.7);
         }
-        body, html { margin: 0; padding: 0; font-family: sans-serif; height: 100%; transition: background-color 0.4s ease; }
-        
-        #globalHeader { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 2px solid transparent; transition: all 0.4s ease; }
-        .header-electric { background: #fff; border-bottom-color: var(--accent-main); color: var(--text-main); }
-        .header-focus { background: #0f172a; border-bottom-color: var(--accent-surface); color: var(--text-surface); }
 
-        .app-container { height: calc(100vh - 60px); width: 100vw; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; overflow-y: auto; }
-        .electric-sky { background-color: var(--bg-main); color: var(--text-main); }
-        .focus-engine { background-color: var(--bg-surface); color: var(--text-surface); }
-
-        .btn { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
-        #managementView, #recordingView { width: 100%; max-width: 900px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--text-main); margin-bottom: 20px; }
+        body, html { margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; height: 100%; transition: background 0.5s ease; background: var(--bg-main); color: var(--text-dark); }
         
-        /* FocusEngine UI */
-        .video-wrapper { position: relative; width: 100%; max-width: 640px; margin: 0 auto; }
-        #cameraFeed { background: #000; border-radius: 10px; width: 100%; border: 4px solid var(--accent-surface); transform: scaleX(-1); }
-        #teleprompter { position: absolute; top: 10%; left: 10%; width: 80%; height: 60%; color: white; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; overflow-y: auto; font-size: 1.5rem; text-align: center; pointer-events: none; }
+        /* Modern Header */
+        #globalHeader { 
+            height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; 
+            backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
+        }
+        .header-focus { border-bottom: 1px solid rgba(255,255,255,0.1); color: white; background: rgba(15, 23, 42, 0.8); }
+
+        /* App Container */
+        .app-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .focus-engine { background: var(--bg-dark); min-height: 100vh; }
+
+        /* Premium UI Components */
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid rgba(0,0,0,0.05); }
+        .btn { padding: 12px 24px; cursor: pointer; border: none; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        /* Recording / Focus UI */
+        .video-wrapper { position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 4px solid var(--accent-green); }
+        #cameraFeed { width: 100%; display: block; transform: scaleX(-1); }
+        #teleprompter { 
+            position: absolute; bottom: 40px; left: 5%; width: 90%; height: 150px; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 16px;
+            color: white; padding: 20px; font-size: 1.25rem; text-align: center; overflow-y: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .rec-btn-active { background: #ef4444 !important; color: white; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
-<body class="electric-sky" id="appRoot">
+<body id="appRoot">
 
-    <header id="globalHeader" class="header-electric">
-        <div style="font-weight: bold; font-size: 1.2rem;">LensFlow <span style="font-weight: 300;">| Unified</span></div>
-        <button class="btn btn-focus" onclick="toggleMode()" id="modeToggleBtn">Switch to FocusEngine</button>
+    <header id="globalHeader">
+        <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">LENS<span style="color: var(--accent-gold);">FLOW</span></div>
+        <button class="btn" style="background: var(--accent-gold); color: white;" onclick="toggleMode()" id="modeToggleBtn">Switch to FocusEngine</button>
     </header>
 
     <div class="app-container">
         <div id="managementView">
-            <h1>Dashboard</h1>
-            <textarea id="scriptInput" style="width: 100%; height: 100px; margin-bottom: 20px;" placeholder="Paste your script here..."></textarea>
-            <h3>Recent Recordings</h3>
-            <ul id="archiveList" class="card" style="list-style: none; padding: 0;"><li>No recordings found.</li></ul>
+            <h1 style="font-size: 2.5rem; letter-spacing: -1px;">Dashboard</h1>
+            <div class="card">
+                <h3>Script Editor</h3>
+                <textarea id="scriptInput" style="width: 100%; height: 150px; border-radius: 12px; border: 1px solid #ddd; padding: 15px; font-size: 1rem;" placeholder="Write your script here..."></textarea>
+            </div>
+            <h3>Archive</h3>
+            <ul id="archiveList" class="card" style="list-style: none; padding: 0;"><li>No recordings yet.</li></ul>
         </div>
 
         <div id="recordingView" style="display: none;">
@@ -49,7 +69,9 @@
                 <video id="cameraFeed" autoplay playsinline muted></video>
                 <div id="teleprompter">Your script will appear here...</div>
             </div>
-            <button id="recBtn" class="btn btn-focus" style="margin-top:20px; padding: 15px 40px; font-size: 1.2rem;" onclick="toggleRecording()">Start Recording</button>
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="recBtn" class="btn" style="background: var(--accent-green); color: white; font-size: 1.2rem; padding: 15px 50px;" onclick="toggleRecording()">Start Recording</button>
+            </div>
         </div>
     </div>
 
@@ -59,14 +81,11 @@
         const teleprompter = document.getElementById('teleprompter');
         const scriptInput = document.getElementById('scriptInput');
         const archiveList = document.getElementById('archiveList');
-        
         let mediaRecorder, recordedChunks = [];
 
-        // Teleprompter Sync
-        scriptInput.oninput = () => { teleprompter.innerText = scriptInput.value; };
+        scriptInput.oninput = () => { teleprompter.innerText = scriptInput.value || "Your script will appear here..."; };
 
-        // Camera & Recording Logic
-        async function startCamera() { try { const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); video.srcObject = stream; } catch (e) { alert("Camera access denied."); } }
+        async function startCamera() { try { const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); video.srcObject = stream; } catch (e) { alert("Camera access needed."); } }
 
         function toggleRecording() {
             if (!mediaRecorder || mediaRecorder.state === 'inactive') {
@@ -76,33 +95,39 @@
                 mediaRecorder.onstop = saveRecording;
                 mediaRecorder.start();
                 recBtn.innerText = "Stop Recording";
-                recBtn.style.backgroundColor = "#EF4444";
+                recBtn.classList.add('rec-btn-active');
             } else {
                 mediaRecorder.stop();
                 recBtn.innerText = "Start Recording";
-                recBtn.style.backgroundColor = "var(--accent-surface)";
+                recBtn.classList.remove('rec-btn-active');
             }
         }
 
         function saveRecording() {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const li = document.createElement('li');
-            li.innerHTML = `🎥 Recording saved: ${new Date().toLocaleTimeString()} <a href="${URL.createObjectURL(blob)}" download="vid.webm">Download</a>`;
-            if(archiveList.innerText === "No recordings found.") archiveList.innerHTML = '';
+            li.style.padding = "10px 0"; li.style.borderBottom = "1px solid #eee";
+            li.innerHTML = `🎥 Recording: ${new Date().toLocaleTimeString()} <a href="${URL.createObjectURL(blob)}" download="lensflow.webm" style="margin-left:20px; color:var(--accent-gold);">Download</a>`;
+            if(archiveList.innerText.includes("No recordings")) archiveList.innerHTML = '';
             archiveList.appendChild(li);
         }
 
         function toggleMode() {
-            const root = document.getElementById('appRoot'), header = document.getElementById('globalHeader'), btn = document.getElementById('modeToggleBtn'), mgmt = document.getElementById('managementView'), rec = document.getElementById('recordingView');
-            const isElectric = root.classList.contains('electric-sky');
+            const root = document.getElementById('appRoot'), header = document.getElementById('globalHeader'), mgmt = document.getElementById('managementView'), rec = document.getElementById('recordingView');
+            const isElectric = !root.classList.contains('focus-engine');
             
-            root.className = isElectric ? 'focus-engine' : 'electric-sky';
-            header.className = isElectric ? 'header-focus' : 'header-electric';
-            mgmt.style.display = isElectric ? 'none' : 'block';
-            rec.style.display = isElectric ? 'block' : 'none';
-            btn.innerText = isElectric ? "Switch to Electric Sky" : "Switch to FocusEngine";
-            
-            if (!isElectric) { /* Back to management */ } else { startCamera(); }
+            if (isElectric) {
+                root.classList.add('focus-engine');
+                header.classList.add('header-focus');
+                mgmt.style.display = 'none';
+                rec.style.display = 'block';
+                startCamera();
+            } else {
+                root.classList.remove('focus-engine');
+                header.classList.remove('header-focus');
+                mgmt.style.display = 'block';
+                rec.style.display = 'none';
+            }
         }
     </script>
 </body>
