@@ -1,26 +1,136 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><title>Glimr | Studio</title><style>
-:root{--bg:#0f0f0f;--gold:#f59e0b;--card:#1a1a1a;--txt:#fff}body{margin:0;background:var(--bg);color:var(--txt);font-family:sans-serif}
-.app{max-width:900px;margin:auto;padding:20px}.card{background:var(--card);padding:20px;border-radius:15px;margin:10px 0;border:1px solid #333}
-textarea{width:100%;height:60px;background:#000;color:#fff;border:1px solid #444;border-radius:8px;padding:10px}
-.premium{border:2px solid var(--gold)!important;box-shadow:0 0 15px var(--gold)}
-.studio{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99}
-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.tele{position:absolute;bottom:10%;left:5%;width:90%;background:rgba(0,0,0,.6);padding:20px;border-radius:15px;text-align:center}
-</style></head><body><div class="app" id="dash">
-<h2>GLIMR DASHBOARD</h2>
-<div class="card"><h3>ScriptLens™</h3><textarea id="in"></textarea><button onclick="ai()">✨ Magic Rewrite</button></div>
-<div class="card"><h3>Booth Premium</h3><label><input type="checkbox" id="prem" onchange="p()"> Enable 4K Strips</label></div>
-<div class="card"><h3>Time-Lock™</h3><input type="datetime-local" id="lock"> <button onclick="saveLock()">Set Lock</button></div>
-<button onclick="s(1)" style="width:100%;padding:20px;font-size:1.2rem">Enter Studio</button>
-<div id="recap" class="card"><h3>Magic Recap</h3><p id="recText">No recording yet.</p></div></div>
-<div class="studio" id="stud"><div style="position:absolute;top:20px;left:20px"><button onclick="s(0)">Back</button><button id="rec" onclick="r()">Rec</button></div>
-<video id="v" autoplay playsinline muted></video><div id="tele" class="tele">...</div></div>
-<script>
-const v=document.getElementById('v'),s=(t)=>{document.getElementById('dash').style.display=t?'none':'block';document.getElementById('stud').style.display=t?'block':'none';if(t)navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(st=>v.srcObject=st)};
-document.getElementById('in').oninput=(e)=>document.getElementById('tele').innerText=e.target.value;
-function ai(){document.getElementById('in').value+="... (AI Polished: A memory that lasts.)";document.getElementById('tele').innerText=document.getElementById('in').value}
-function r(){const b=document.getElementById('rec');if(b.innerText=='Rec'){b.innerText='Stop';document.getElementById('recText').innerText="Recap: "+document.getElementById('in').value.substring(0,50)+"..."}else{b.innerText='Rec'}}
-function p(){v.className=document.getElementById('prem').checked?'premium':''}
-function saveLock(){const t=new Date(document.getElementById('lock').value);alert(t>new Date()?"Locked until "+t.toLocaleString():"Date invalid");}
-</script></body></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glimr | Professional Studio Infrastructure</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --accent-gold: #f59e0b;
+            --surface-color: #1a1a1a;
+            --text-main: #ffffff;
+            --font-stack: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body { margin: 0; background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-stack); }
+
+        /* --- Global Layout --- */
+        .platform-wrapper { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* --- Component Cards --- */
+        .module-card { 
+            background: var(--surface-color); 
+            border: 1px solid #333; 
+            border-radius: 20px; 
+            padding: 30px; 
+            margin-bottom: 25px;
+            transition: border 0.3s ease;
+        }
+        .module-card:hover { border-color: #444; }
+
+        /* --- Studio Specifics --- */
+        #studio-environment { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: #000; 
+            z-index: 9999;
+        }
+        .teleprompter-glass {
+            position: absolute; bottom: 10%; left: 10%; width: 80%;
+            background: rgba(0,0,0,0.65); backdrop-filter: blur(12px);
+            padding: 30px; border-radius: 24px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- Controls --- */
+        .gold-btn { background: var(--accent-gold); color: #000; border: none; padding: 14px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+        .gold-btn:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+    <!-- CORE DASHBOARD -->
+    <div id="dashboard" class="platform-wrapper">
+        <header>
+            <h1 style="font-size: 3rem; letter-spacing: -2px;">Glimr Infrastructure</h1>
+        </header>
+
+        <!-- ScriptLens AI Module -->
+        <section class="module-card">
+            <h3>ScriptLens™ AI Ghostwriter</h3>
+            <textarea id="script-editor" style="width: 100%; height: 150px; background: #000; border: 1px solid #444; border-radius: 12px; color: #fff; padding: 15px;" placeholder="Pour your heart out..."></textarea>
+            <button class="gold-btn" onclick="aiModule.rewrite()">✨ Magic Rewrite</button>
+        </section>
+
+        <!-- Feature Roadmap Integration -->
+        <section class="module-card">
+            <h3>Active Infrastructure</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4>Time-Lock™</h4>
+                    <input type="datetime-local" id="time-lock-input" style="background:#000; color:#fff; border:1px solid #444; padding: 10px;">
+                    <button onclick="timeLock.set()">Secure Lock</button>
+                </div>
+                <div>
+                    <h4>Booth Premium</h4>
+                    <label><input type="checkbox" id="booth-toggle"> Enable 4K Strips</label>
+                </div>
+            </div>
+        </section>
+
+        <button class="gold-btn" style="width: 100%; font-size: 1.5rem;" onclick="studioManager.launch()">Launch Studio Environment</button>
+    </div>
+
+    <!-- PRODUCTION STUDIO -->
+    <div id="studio-environment">
+        <video id="live-feed" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+        <div id="teleprompter-display" class="teleprompter-glass">Script initialized...</div>
+        <button onclick="studioManager.exit()" style="position:absolute; top:20px; left:20px;">Exit</button>
+    </div>
+
+    <script>
+        // Module: AI Rewrite Logic
+        const aiModule = {
+            rewrite: () => {
+                const input = document.getElementById('script-editor');
+                input.value = "✨ Polished: " + input.value + " — Designed to be replayed forever.";
+                document.getElementById('teleprompter-display').innerText = input.value;
+            }
+        };
+
+        // Module: Time-Lock Logic
+        const timeLock = {
+            set: () => {
+                const time = document.getElementById('time-lock-input').value;
+                if(!time) return alert("Select a delivery date.");
+                // Here is where you integrate your actual backend worker logic
+                console.log("Time-Lock active for:", time);
+                alert("Memory secured. Delivery set for: " + time);
+            }
+        };
+
+        // Module: Studio State Management
+        const studioManager = {
+            launch: async () => {
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('studio-environment').style.display = 'block';
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    document.getElementById('live-feed').srcObject = stream;
+                } catch(err) { alert("Camera access required."); }
+            },
+            exit: () => {
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('studio-environment').style.display = 'none';
+            }
+        };
+
+        // Live Teleprompter Sync
+        document.getElementById('script-editor').addEventListener('input', (e) => {
+            document.getElementById('teleprompter-display').innerText = e.target.value;
+        });
+    </script>
+</body>
+</html>
