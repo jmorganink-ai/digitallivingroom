@@ -1,115 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glimr | A film studio in your pocket.</title>
-    <style>
-        :root {
-            --bg-dark: #0f0f0f;
-            --accent-gold: #f59e0b;
-            --card-bg: #1a1a1a;
-            --text-main: #ffffff;
-            --text-sub: #a3a3a3;
-        }
-        body { margin: 0; background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', system-ui, sans-serif; }
-        
-        /* Header */
-        header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; }
-        
-        /* Dashboard Layout */
-        .app-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .card { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid #333; margin-bottom: 20px; }
-        h1, h2 { letter-spacing: -1px; }
-
-        /* ScriptLens Section */
-        #scriptLensArea { border-left: 4px solid var(--accent-gold); }
-        textarea { width: 100%; height: 120px; background: #000; border: 1px solid #444; color: white; border-radius: 10px; padding: 15px; font-size: 1rem; margin-top: 10px; }
-        
-        /* Roadmap Grid */
-        .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
-        .roadmap-item { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; }
-        
-        /* Focus Engine */
-        .focus-engine { display: none; background: #000; height: 100vh; position: fixed; top:0; left:0; width: 100%; z-index: 1000; }
-        #video-container { position: relative; width: 100%; height: 100%; }
-        #cameraFeed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        #teleprompter { position: absolute; bottom: 10%; left: 10%; width: 80%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 30px; border-radius: 20px; font-size: 1.8rem; text-align: center; }
-        .controls { position: absolute; top: 30px; left: 30px; z-index: 1001; }
-    </style>
-</head>
-<body>
-
-    <div id="dashboardView" class="app-container">
-        <header>
-            <div class="logo">GLIMR</div>
-            <button onclick="enterStudio()" style="background: var(--accent-gold); border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer;">Enter Studio</button>
-        </header>
-
-        <h1>A film studio in your pocket. With heart.</h1>
-        
-        <div class="card" id="scriptLensArea">
-            <h3>ScriptLens™ — AI Ghostwriter</h3>
-            <textarea id="scriptInput" placeholder="Pour your heart out. Type your messy thoughts..."></textarea>
-            <button onclick="aiRewrite()" style="margin-top: 15px; background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 10px; border-radius: 5px; cursor: pointer;">✨ Magic Rewrite</button>
-        </div>
-
-        <h2>The next chapter.</h2>
-        <div class="roadmap-grid">
-            <div class="roadmap-item"><h4>Magic Recap</h4><p>Auto-generate beautiful text recaps.</p><input type="email" placeholder="you@email.com"><button>Notify</button></div>
-            <div class="roadmap-item"><h4>Time-Lock™</h4><p>Open at the perfect moment.</p><input type="email" placeholder="you@email.com"><button>Notify</button></div>
-            <div class="roadmap-item"><h4>Booth Premium</h4><p>4K Strips, no Glimr footer.</p><input type="email" placeholder="you@email.com"><button>Notify</button></div>
-        </div>
-    </div>
-
-    <div id="studioView" class="focus-engine">
-        <div class="controls">
-            <button onclick="exitStudio()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">&larr; Exit</button>
-            <button id="recBtn" onclick="toggleRecording()" style="background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; margin-left: 10px;">Start Recording</button>
-        </div>
-        <div id="video-container">
-            <video id="cameraFeed" autoplay playsinline muted></video>
-            <div id="teleprompter">Your script will appear here...</div>
-        </div>
-    </div>
-
-    <script>
-        const studio = document.getElementById('studioView');
-        const dash = document.getElementById('dashboardView');
-        const video = document.getElementById('cameraFeed');
-        const teleprompter = document.getElementById('teleprompter');
-        const scriptInput = document.getElementById('scriptInput');
-
-        // Sync Script
-        scriptInput.oninput = () => { teleprompter.innerText = scriptInput.value || "Your script will appear here..."; };
-
-        // AI Rewrite Simulator
-        function aiRewrite() {
-            const raw = scriptInput.value;
-            scriptInput.value = "✨ Rewriting... \n\n" + raw + "\n\n(AI polished version: 'I wanted to capture this moment because it feels like a memory that deserves to be replayed forever.')";
-            teleprompter.innerText = scriptInput.value;
-        }
-
-        async function enterStudio() {
-            studio.style.display = 'block';
-            dash.style.display = 'none';
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                video.srcObject = stream;
-            } catch(e) { alert("Camera access required."); }
-        }
-
-        function exitStudio() {
-            studio.style.display = 'none';
-            dash.style.display = 'block';
-        }
-
-        function toggleRecording() {
-            const btn = document.getElementById('recBtn');
-            btn.innerText = btn.innerText === "Start Recording" ? "Stop Recording" : "Start Recording";
-            btn.style.background = btn.innerText === "Stop Recording" ? "#333" : "#ef4444";
-        }
-    </script>
-</body>
-</html>
+<html lang="en"><head><meta charset="UTF-8"><title>Glimr | Studio</title><style>
+:root{--bg:#0f0f0f;--gold:#f59e0b;--card:#1a1a1a;--txt:#fff}body{margin:0;background:var(--bg);color:var(--txt);font-family:sans-serif}
+.app{max-width:900px;margin:auto;padding:20px}.card{background:var(--card);padding:20px;border-radius:15px;margin:10px 0;border:1px solid #333}
+textarea{width:100%;height:60px;background:#000;color:#fff;border:1px solid #444;border-radius:8px;padding:10px}
+.premium{border:2px solid var(--gold)!important;box-shadow:0 0 15px var(--gold)}
+.studio{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.tele{position:absolute;bottom:10%;left:5%;width:90%;background:rgba(0,0,0,.6);padding:20px;border-radius:15px;text-align:center}
+</style></head><body><div class="app" id="dash">
+<h2>GLIMR DASHBOARD</h2>
+<div class="card"><h3>ScriptLens™</h3><textarea id="in"></textarea><button onclick="ai()">✨ Magic Rewrite</button></div>
+<div class="card"><h3>Booth Premium</h3><label><input type="checkbox" id="prem" onchange="p()"> Enable 4K Strips</label></div>
+<div class="card"><h3>Time-Lock™</h3><input type="datetime-local" id="lock"> <button onclick="saveLock()">Set Lock</button></div>
+<button onclick="s(1)" style="width:100%;padding:20px;font-size:1.2rem">Enter Studio</button>
+<div id="recap" class="card"><h3>Magic Recap</h3><p id="recText">No recording yet.</p></div></div>
+<div class="studio" id="stud"><div style="position:absolute;top:20px;left:20px"><button onclick="s(0)">Back</button><button id="rec" onclick="r()">Rec</button></div>
+<video id="v" autoplay playsinline muted></video><div id="tele" class="tele">...</div></div>
+<script>
+const v=document.getElementById('v'),s=(t)=>{document.getElementById('dash').style.display=t?'none':'block';document.getElementById('stud').style.display=t?'block':'none';if(t)navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(st=>v.srcObject=st)};
+document.getElementById('in').oninput=(e)=>document.getElementById('tele').innerText=e.target.value;
+function ai(){document.getElementById('in').value+="... (AI Polished: A memory that lasts.)";document.getElementById('tele').innerText=document.getElementById('in').value}
+function r(){const b=document.getElementById('rec');if(b.innerText=='Rec'){b.innerText='Stop';document.getElementById('recText').innerText="Recap: "+document.getElementById('in').value.substring(0,50)+"..."}else{b.innerText='Rec'}}
+function p(){v.className=document.getElementById('prem').checked?'premium':''}
+function saveLock(){const t=new Date(document.getElementById('lock').value);alert(t>new Date()?"Locked until "+t.toLocaleString():"Date invalid");}
+</script></body></html>
